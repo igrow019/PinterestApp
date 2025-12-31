@@ -12,6 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -19,13 +25,13 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
+          pip install flet==0.27.6
+          pip install requests
 
-      - name: Build APK with Flet
-        uses: flet-dev/flet-build-action@v1
-        with:
-          target: android
-          
+      - name: Build APK
+        run: |
+          flet build apk --verbose
+
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
