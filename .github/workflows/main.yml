@@ -12,26 +12,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 1. Setup Java (Required for Android)
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # 2. Setup Flutter (The Engine - CRITICAL MISSING STEP)
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
+
+      # 3. Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
 
+      # 4. Install Your App
       - name: Install Dependencies
         run: |
-          pip install flet==0.27.6
-          pip install requests
+          pip install -r requirements.txt
+          flet --version
 
+      # 5. Build the APK
       - name: Build APK
         run: |
           flet build apk --verbose
 
+      # 6. Save the APK so you can download it
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
